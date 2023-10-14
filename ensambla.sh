@@ -21,13 +21,9 @@ sjasmplus --nologo --lstlab --lst=plus3.lst plus3.asm
 
 if [ $? -ne 0 ]; then
 	echo
-	echo
-	echo
 	echo "*************************"
 	echo "* ¡Falló el ensamblado! *"
 	echo "*************************"
-	echo
-	echo
 	echo
 	exit 1
 fi
