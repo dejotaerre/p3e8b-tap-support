@@ -123,3 +123,4 @@ para el interface simple de 8 bits.
 	INCLUDE	"plus3ROM3.asm"			; ROM 48k ROM
 
 ; ==================================================================================================
+; https://github.com/dejotaerre/p3e8b-tap-support
