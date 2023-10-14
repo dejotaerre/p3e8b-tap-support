@@ -66,32 +66,45 @@ echo "exit"							>> makedsk
 rm makedsk
 cd ..
 
-#fusexec="fuse-sdl"
-fusexec="fuse"
+if ! command -v fuse >/dev/null 2>&1; then
 
-#--graphics-filter tv4x 
-# argumentos para fuse con el propósito de testeo rápido
-exec_args="--machine plus3 \
---simpleide \
---multiface3 \
---plus3disk ./test.dsk \
---rom-plus3-0 ./p3t_rom0.rom --rom-plus3-1 ./p3t_rom1.rom \
---rom-plus3-2 ./p3t_rom2.rom --rom-plus3-3 ./p3t_rom3.rom \
---simpleide-masterfile ../+3e8bits.hdf \
---graphics-filter tv4x \
---pal-tv2x \
---drive-plus3a-type 'Double-sided 80 track' --drive-plus3b-type 'Double-sided 80 track'"
+	echo
+	echo
+	echo "ADVERTENCIA: no encuentro el emulador FUSE, así que no podrás probar"
+	echo "el resultado, puede buscar en https://fuse-emulator.sourceforge.net/"
+	echo "o bien descargarlo desde tu gestor de paquetes favorito"
+	echo
 
-comando="${fusexec} ${exec_args}"
+else
 
-echo 
-echo
-echo "***********************************************************************************************"
-echo EJECUTANDO:
-echo $fusexec $exec_args
-echo "***********************************************************************************************"
+	#fusexec="fuse-sdl"
+	fusexec="fuse"
 
-eval $comando > /dev/null 2>&1
+	#--graphics-filter tv4x 
+	# argumentos para fuse con el propósito de testeo rápido
+	exec_args="--machine plus3 \
+	--simpleide \
+	--multiface3 \
+	--plus3disk ./test.dsk \
+	--rom-plus3-0 ./p3t_rom0.rom --rom-plus3-1 ./p3t_rom1.rom \
+	--rom-plus3-2 ./p3t_rom2.rom --rom-plus3-3 ./p3t_rom3.rom \
+	--simpleide-masterfile ../+3e8bits.hdf \
+	--graphics-filter tv4x \
+	--pal-tv2x \
+	--drive-plus3a-type 'Double-sided 80 track' --drive-plus3b-type 'Double-sided 80 track'"
+
+	comando="${fusexec} ${exec_args}"
+
+	echo 
+	echo
+	echo "***********************************************************************************************"
+	echo EJECUTANDO:
+	echo $fusexec $exec_args
+	echo "***********************************************************************************************"
+
+	eval $comando > /dev/null 2>&1
+
+fi
 
 # me muestro el espacio libre queda en los "trozos" sin programación que me quedan en las ROMs
 echo
