@@ -5,8 +5,8 @@ http://sourceforge.net/p/emuscriptoria/code/HEAD/tree/plusROMs/
 (y fueron "beautificados" con TABs sólidos a 8 columnas)
 
 No he podido contactarme con Garry Lancaster solicitándole los fuentes
-de todas las versiones del proyecto +3e, para con solo el fin de modificarlas
-con mi "extensión" de carga de TAPs.
+de todas las versiones del proyecto +3e, solo con el fin de modificarlas
+agregando mi "extensión" de carga de archivos TAPs.
 
 Una cosa si he podido notar de las diferentes versiones de ROMs, y es que las
 ROMs 0 y 3 son binariamente iguales en cualquier version de interface IDE
@@ -22,15 +22,20 @@ tenía en mente
 ** IMPORTANTE:                                                               **
 ** LA ROM 2 CORRESPONDE A LA DEL INTERFACE SIMPLE DE 8 BITS DEBIDO QUE LOS   **
 ** FUENTES DE LAS VERSIONES PARA LOS OTROS INTERFACES (ej: DivMMC) NO ESTAN  **
-** DISPONIBLES                                                               **
+** DISPONIBLES, AUN ASÍ ES POSIBLE QUE TODO FUNCIONE BIEN INTERCAMBIANDO EL  **
+** BINARIO DE LA ROM2 POR LAS DE OTRAS VERSIONES, YA QUE MI EXTENSION PARA   **
+** CARGA DE TAPS LO UNICO QUE HACE ES ABRIR, CARGAR, Y CERRAR ARCHIVOS       **
+** (aunque esto no lo he probado)                                            **
 *******************************************************************************
 
 Por otro lado el inconveniente con estos fuentes es que solo funcionan con
 spanish=0, v41=0, garry=1, cualquier otra combinación no funciona, es decir:
-(faltan labels, defs con valores incorrectos, resultados diferentes a 16K, etc...)
+(falta de labels, defs con valores incorrectos, resultados diferentes a 16K,
+y larguísimo etc...)
 
 Así que en base a esto decidí quitar toda referencia a spanish=0, v41=0, garry=1
-y solo quedarme con la versión en la que quiero trabajar, es decir: +3e en inglés
+y solo quedarme con la versión con la que quiero trabajar, es decir:
+ROMS +3e de 8 bits en inglés
 
 ====================================================================================================
 
@@ -62,7 +67,7 @@ para el interface simple de 8 bits.
 					; modificar los parámetros en el ELSE del
 					; IF alt_colors de mas abajo)
 
-	DEFINE	alt_colors	1	; esquema de colores para el modo alternative
+	DEFINE	alt_colors	1	; esquema de colores para el modo alternativo
 
 ; ==================================================================================================
 
@@ -118,3 +123,4 @@ para el interface simple de 8 bits.
 	INCLUDE	"plus3ROM3.asm"			; ROM 48k ROM
 
 ; ==================================================================================================
+; DJr - oct/2023
