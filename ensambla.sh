@@ -45,6 +45,14 @@ romprefix=p3t_
 cat ./roms_standar_p3/P3-41A.ROM ${romprefix}rom0.rom ${romprefix}rom1.rom > ROM-A.rom
 cat ./roms_standar_p3/P3-41B.ROM ${romprefix}rom2.rom ${romprefix}rom3.rom > ROM-B.rom
 
+# copio las roms generadas hacia mi otro proyecto "+3E File Selector"
+# (si existe la carpeta) y es para usar con FUSE para sus testeos con
+# dicho proyecto
+if [ -d "../p3e-file-selector" ]; then
+	cp -v -f p3t_rom?.rom ../p3e-file-selector
+	echo
+fi
+
 # creo una imágen de disquete con programas para testeo en emulador
 cd bin
 rm -f ../test.dsk
@@ -87,7 +95,7 @@ eval $comando > /dev/null 2>&1
 
 # me muestro el espacio libre queda en los "trozos" sin programación que me quedan en las ROMs
 echo
-echo "Espacio libre en ROMs bajo la etiqueta FREE_ROMx_n:"
+echo "Espacio libre en ROMs bajo las etiquetas FREE_ROMx_n:"
 echo
 echo ROM0:
 cat plus3.lst | grep "R0_FREE_." | grep --color=never "0x" | sort -k2
