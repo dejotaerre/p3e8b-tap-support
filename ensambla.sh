@@ -102,7 +102,7 @@ else
 
 fi
 
-# me muestro el espacio libre queda en los "trozos" sin programación que me quedan en las ROMs
+# me muestro el espacio libre que queda en los "trozos" sin programación en las 4 ROMs de 16K
 echo
 echo "Espacio libre en ROMs bajo las etiquetas FREE_ROMx_n:"
 echo
