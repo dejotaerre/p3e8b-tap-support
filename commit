@@ -1,6 +1,6 @@
 #!/bin/bash
 git remote set-url origin https://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@github.com/dejotaerre/p3e8b-tap-support
-git add -A
+#git add -A
 git commit -a -m "+3E"
 
 codigo_salida=$?
