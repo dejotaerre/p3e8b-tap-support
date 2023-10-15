@@ -87,9 +87,10 @@ else
 	--simpleide-masterfile ./+3e8bits.hdf \
 	--graphics-filter tv4x \
 	--pal-tv2x \
-	--drive-plus3a-type 'Double-sided 80 track' --drive-plus3b-type 'Double-sided 80 track'"
+	--drive-plus3a-type 'Double-sided 80 track' \
+	--drive-plus3b-type 'Double-sided 80 track'"
 
-	comando="${fusexec} ${exec_args}"
+	excmd="${fusexec} ${exec_args}"
 
 	echo 
 	echo
@@ -98,7 +99,7 @@ else
 	echo $fusexec $exec_args
 	echo "***********************************************************************************************"
 
-	eval $comando > /dev/null 2>&1
+	eval $excmd > /dev/null 2>&1
 
 fi
 
