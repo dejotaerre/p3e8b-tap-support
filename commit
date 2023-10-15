@@ -7,10 +7,7 @@ git commit -a -m "+3E"
 codigo_salida=$?
 
 if [ $codigo_salida -eq 0 ]; then
-    echo "El comando se ejecutó correctamente."
+    git push origin main
 else
     echo "El comando falló con código de salida $codigo_salida."
 fi
-
-exit
-git push origin main
