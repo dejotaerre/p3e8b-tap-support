@@ -49,7 +49,7 @@ if [ -d "../p3e-file-selector" ]; then
 	echo
 fi
 
-# creo una imágen de disquete con programas para testeo en emulador
+# creo una imágen de disquete con archivos para testeo en el emulador
 cd bin
 rm -f ../test.dsk
 echo "new -f PCW3 ../test.dsk"		>  makedsk
@@ -84,7 +84,7 @@ else
 	--plus3disk ./test.dsk \
 	--rom-plus3-0 ./p3t_rom0.rom --rom-plus3-1 ./p3t_rom1.rom \
 	--rom-plus3-2 ./p3t_rom2.rom --rom-plus3-3 ./p3t_rom3.rom \
-	--simpleide-masterfile ../+3e8bits.hdf \
+	--simpleide-masterfile ./+3e8bits.hdf \
 	--graphics-filter tv4x \
 	--pal-tv2x \
 	--drive-plus3a-type 'Double-sided 80 track' --drive-plus3b-type 'Double-sided 80 track'"
