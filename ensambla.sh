@@ -1,23 +1,31 @@
 #!/bin/bash
 
 #===========================================================================================
-#vemos si tenemos lo necesario
 
-if ! command -v sjasmplus >/dev/null 2>&1; then
+arquitectura=$(uname -m)
 
-		echo
-		echo "SJASMPLUS no está instalado en el sistema, no se puede ensamblar"
-		echo "(https://github.com/z00m128/sjasmplus.git)"
-		echo
-		exit 1
-
+if [ "$arquitectura" = "x86_64" ]; then
+    cpcfscmd=cpcxfs
+    sjasmcmd=sjasmplus
+elif [ "$arquitectura" = "i686" ]; then
+    cpcfscmd=cpcxfs
+    sjasmcmd=sjasmplus
+elif [ "$arquitectura" = "armv7l" ]; then
+    cpcfscmd=cpcxfs_arm
+    sjasmcmd=sjasmplus_arm
+elif [ "$arquitectura" = "aarch64" ]; then
+    cpcfscmd=cpcxfs_arm
+    sjasmcmd=sjasmplus_arm
+else
+    echo "Arquitectura no compatible: $arquitectura con este script"
+    exit 1
 fi
 
 echo
 
 rm -f *.rom
 
-sjasmplus --nologo --lstlab --lst=plus3.lst plus3.asm
+./bin/$sjasmcmd --lstlab --lst=plus3.lst plus3.asm
 
 if [ $? -ne 0 ]; then
 	echo
@@ -30,20 +38,20 @@ fi
 
 echo
 
-#--plus3disk file
-#--snapshot file
-#--tape file
-
 romprefix=p3t_
 
-# ROMs de 64K por chip para quemar en EEPROM DOBLE ROM en sócalo 1 y 2
-# con la versión en inglés de las ROMs +3 v4.1
-cat ./roms_standar_p3/P3-41A.ROM ${romprefix}rom0.rom ${romprefix}rom1.rom > ROM-A.rom
-cat ./roms_standar_p3/P3-41B.ROM ${romprefix}rom2.rom ${romprefix}rom3.rom > ROM-B.rom
+# ROMs de 64K por chip para quemar en EPROMs de 64K para sócalos 1 y 2
+# con la versión en inglés de las ROMs +3 v4.1 en un +3 con switch de doble banco
+cat ./roms_standar_p3/P3-41A.ROM ${romprefix}rom0.rom ${romprefix}rom1.rom > 64K_ROMA.rom
+cat ./roms_standar_p3/P3-41B.ROM ${romprefix}rom2.rom ${romprefix}rom3.rom > 64K_ROMB.rom
+
+# ROMs de 32K por chip para quemar en EPROMs 32K para sócalos 1 y 2
+cat ${romprefix}rom0.rom ${romprefix}rom1.rom > 32K_ROMA.rom
+cat ${romprefix}rom2.rom ${romprefix}rom3.rom > 32K_ROMB.rom
 
 # copio las roms generadas hacia mi otro proyecto "+3E File Selector"
-# (si existe la carpeta) y es para usar con FUSE para sus testeos con
-# dicho proyecto
+# (si es que existe la carpeta) y es para usar con FUSE para sus testeos
+# en dicho proyecto
 if [ -d "../p3e-file-selector" ]; then
 	cp -v -f p3t_rom?.rom ../p3e-file-selector
 	echo
@@ -51,32 +59,51 @@ fi
 
 # creo una imágen de disquete con archivos para testeo en el emulador
 cd bin
+
 rm -f ../test.dsk
-echo "new -f PCW3 ../test.dsk"		>  makedsk
-echo "open -f PCW3 ../test.dsk"		>> makedsk
-echo "mput -f -b taps/*.tap"		>> makedsk
-echo "mput -f -b z80s/PROFANAT.Z80" >> makedsk
-echo "mput -f -b z80s/RENEGAD2.Z80" >> makedsk
-echo "exit"							>> makedsk
-./cpcxfs < makedsk
+
+# creo una imágen de disquete con archivos para testeo
+# (ignoro por que "mput" no funciona bien con redirecciones de archivos,
+# ej: "<", por eso lo hago archivo por arhivo)
+
+echo "new -f PCW3 ../test.dsk"  >  makedsk
+echo "open -f PCW3 ../test.dsk" >> makedsk
+echo "cd ./dskfiles" >> makedsk
+echo "put -b 1942.tap" >> makedsk
+echo "put -b abusimb.tap" >> makedsk
+echo "put -b beyplc.tap" >> makedsk
+echo "put -b bumpy.tap" >> makedsk
+echo "put -b vixen.tap" >> makedsk
+echo "put -b wecleman.tap" >> makedsk
+echo "put -b PROFANAT.Z80" >> makedsk
+echo "put -b RENEGAD2.Z80" >> makedsk
+echo "exit" >> makedsk
+
+./${cpcfscmd} < makedsk
+
 rm makedsk
 cd ..
 
 if ! command -v fuse >/dev/null 2>&1; then
 
 	echo
+	echo -e "\e[1;31mADVERTENCIA:\e[0m no encuentro el emulador FUSE, así que no podrás probar"
+	echo "el resultado, puedes buscar en https://fuse-emulator.sourceforge.net/"
+	echo "o bien instalarlo con tu gestor de paquetes favorito"
 	echo
-	echo "ADVERTENCIA: no encuentro el emulador FUSE, así que no podrás probar"
-	echo "el resultado, puede buscar en https://fuse-emulator.sourceforge.net/"
-	echo "o bien descargarlo desde tu gestor de paquetes favorito"
-	echo
+	echo "Sin embargo, tus nuevas ROMs fueron ensambladas con los nombres"
+	echo "${romprefix}rom0.rom"
+	echo "${romprefix}rom1.rom"
+	echo "${romprefix}rom2.rom"
+	echo "${romprefix}rom3.rom"
+	echo "para que puedas quemarlas en EPROMs"
+	echo "***********************************************************************************************"
 
 else
 
 	#fusexec="fuse-sdl"
 	fusexec="fuse"
 
-	#--graphics-filter tv4x 
 	# argumentos para fuse con el propósito de testeo rápido
 	exec_args="--machine plus3 \
 	--simpleide \
@@ -89,6 +116,9 @@ else
 	--pal-tv2x \
 	--drive-plus3a-type 'Double-sided 80 track' \
 	--drive-plus3b-type 'Double-sided 80 track'"
+
+	#--snapshot file
+	#--tape file
 
 	excmd="${fusexec} ${exec_args}"
 
@@ -104,6 +134,7 @@ else
 fi
 
 # me muestro el espacio libre que queda en los "trozos" sin programación en las 4 ROMs de 16K
+
 echo
 echo "Espacio libre en ROMs bajo las etiquetas FREE_ROMx_n:"
 echo
@@ -121,8 +152,7 @@ cat plus3.lst | grep "R3_FREE_." | grep --color=never "0x" | sort -k2
 echo
 
 # limpieza
-#rm *.rom
-#rm *.lst
-#rm *.dsk
+rm *.lst
+rm *.dsk
 
 exit 0
