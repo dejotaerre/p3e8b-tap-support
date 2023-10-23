@@ -104,6 +104,7 @@ else
 	fusexec="fuse"
 
 	# genero los comandos para crear una imagen de disquete para testeos en el emulador
+	# para ejecutar y testear las ROMs
 	exec_args="--machine plus3 \
 	--simpleide \
 	--multiface3 \

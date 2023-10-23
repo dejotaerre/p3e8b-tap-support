@@ -42,6 +42,8 @@ del ..\test.dsk
 cpcxfsw < makedsk
 del makedsk
 
+rem Hago una variable de entorno con los parámetros necesarios
+rem para ejecutar y testear las ROMs
 set fuse_opciones=--machine plus3
 set fuse_opciones=%fuse_opciones% --simpleide
 set fuse_opciones=%fuse_opciones% --multiface3
