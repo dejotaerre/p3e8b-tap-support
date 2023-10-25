@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# OCT-2023 - ADICIONADO SOPORTE PARA ARM (i.e Raspberry PI)
+
 #===========================================================================================
 
 arquitectura=$(uname -m)
