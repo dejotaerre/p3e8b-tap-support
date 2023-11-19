@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# OCT-2023 - ADICIONADO SOPORTE PARA ARM (i.e Raspberry PI)
+# OCT-2023 - ADICIONADO SOPORTE PARA ARM (es decir: Raspberry PI)
 
 #===========================================================================================
 
@@ -80,6 +80,8 @@ echo "put -b PROFANAT.Z80" >> makedsk
 echo "put -b RENEGAD2.Z80" >> makedsk
 echo "exit" >> makedsk
 
+cp test.dsk
+
 ./${cpcfscmd} < makedsk
 
 rm makedsk
@@ -108,29 +110,26 @@ else
 	# genero los comandos para crear una imagen de disquete para testeos en el emulador
 	# para ejecutar y testear las ROMs
 	exec_args="--machine plus3 \
-	--simpleide \
-	--multiface3 \
-	--plus3disk ./test.dsk \
-	--rom-plus3-0 ./p3t_rom0.rom --rom-plus3-1 ./p3t_rom1.rom \
-	--rom-plus3-2 ./p3t_rom2.rom --rom-plus3-3 ./p3t_rom3.rom \
-	--simpleide-masterfile ./+3e8bits.hdf \
-	--graphics-filter tv4x \
-	--pal-tv2x \
-	--drive-plus3a-type \"Double-sided 80 track\" \
-	--drive-plus3b-type \"Double-sided 80 track\""
-
-	#--snapshot file
-	#--tape file
-
-	excmd="${fusexec} ${exec_args}"
+--simpleide \
+--multiface3 \
+--rom-plus3-0 ./p3t_rom0.rom --rom-plus3-1 ./p3t_rom1.rom \
+--rom-plus3-2 ./p3t_rom2.rom --rom-plus3-3 ./p3t_rom3.rom \
+--simpleide-masterfile ./+3e8bits.hdf \
+--graphics-filter tv4x \
+--pal-tv2x \
+--drive-plus3a-type \"Double-sided 80 track\" \
+--drive-plus3b-type \"Double-sided 80 track\" \
+--plus3disk ./test.dsk"
 
 	echo 
 	echo
+
 	echo "***********************************************************************************************"
 	echo EJECUTANDO:
 	echo $fusexec $exec_args
 	echo "***********************************************************************************************"
 
+	excmd="${fusexec} ${exec_args}"
 	eval $excmd > /dev/null 2>&1
 
 fi

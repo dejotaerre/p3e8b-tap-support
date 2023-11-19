@@ -4717,7 +4717,7 @@ o0FA0:		DB	o0FA9-$		; 07d offset $09 to Address: ED-EDIT
 o0FA9:		LD	HL,(E_PPC)	; fetch E_PPC the last line number entered.
 					; Note. may not exist and may follow program.
 		BIT	5,(IY+$37)	; test FLAGX  - input mode ?
-		JP	NZ,o1097	; jump forward to CLEAR-SP if not in editor.
+		JP	NZ,CLEARSP	; jump forward to CLEAR-SP if not in editor.
 
 		CALL	o196E		; routine LINE-ADDR to find address of line
 					; or following line if it doesn't exist.
@@ -4725,7 +4725,7 @@ o0FA9:		LD	HL,(E_PPC)	; fetch E_PPC the last line number entered.
 					; address or previous line if at end-marker.
 		LD	A,D		; if there is no program then DE will
 		OR	E		; contain zero so test for this.
-		JP	Z,o1097		; jump to CLEAR-SP if so.
+		JP	Z,CLEARSP		; jump to CLEAR-SP if so.
 
 ; Note. at this point we have a validated line number, not just an
 ; approximation and it would be best to update E_PPC with the true
@@ -4742,7 +4742,7 @@ o0FA9:		LD	HL,(E_PPC)	; fetch E_PPC the last line number entered.
 		LD	B,H		; transfer adjusted value
 		LD	C,L		; to BC register.
 		CALL	o1F05		; routine TEST-ROOM checks free memory.
-		CALL	o1097		; routine CLEAR-SP clears editing area.
+		CALL	CLEARSP		; routine CLEAR-SP clears editing area.
 		LD	HL,(CURCHL)	; address CURCHL
 		EX	(SP),HL		; swap with line address on stack
 		PUSH	HL		; save line address underneath
@@ -5029,7 +5029,7 @@ o107F:		BIT	4,(IY+$30)	; test FLAGS2  - is K channel in use ?
 ; area depending on FLAGX.
 
 ;; CLEAR-SP
-o1097:		PUSH	HL		; preserve HL
+CLEARSP:	PUSH	HL		; preserve HL
 		CALL	o1190		; routine SET-HL
 					; if in edit   HL = WORKSP-1, DE = E_LINE
 					; if in input  HL = STKBOT,   DE = WORKSP
@@ -5769,7 +5769,7 @@ o133C:		CALL	o15EF		; call routine OUT-CODE to print the code.
 		LD	B,$00		; limited to 127
 		CALL	o1A1B		; routine OUT-NUM-1 prints BC.
 
-		CALL	o1097		; routine CLEAR-SP clears editing area which
+		CALL	CLEARSP		; routine CLEAR-SP clears editing area which
 					; probably contained 'RUN'.
 
 		LD	A,(ERR_NR)	; fetch ERR_NR again

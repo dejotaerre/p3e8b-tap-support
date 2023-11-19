@@ -5878,7 +5878,7 @@ m2637:		XOR	A
 		RST	28H
 		DW	o1A1B		; output it
 		RST	28H
-		DW	o1097		; clear editing area/workspace
+		DW	CLEARSP		; clear editing area/workspace
 		LD	A,(ERR_NR)
 		INC	A
 		JR	Z,m2674		; move on if error "OK"
